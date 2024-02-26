@@ -1,5 +1,5 @@
 const express = require('express');
-const { getProducts, getProductById } = require('./controllers/products');
+const { salesController, productsController } = require('./controllers');
 
 const app = express();
 
@@ -10,7 +10,10 @@ app.get('/', (_request, response) => {
   response.json({ status: 'Store Manager UP!' });
 });
 
-app.get('/products', getProducts);
-app.get('/products/:id', getProductById);
+app.get('/products', productsController.getProducts);
+app.get('/products/:id', productsController.getProductById);
+
+app.get('/sales', salesController.getSales);
+app.get('/sales/:id', salesController.getSalesById);
 
 module.exports = app;
