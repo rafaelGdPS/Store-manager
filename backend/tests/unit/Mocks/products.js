@@ -32,10 +32,22 @@ const notFoundFulRequest = {
   data: { message: 'Product not found' },
 };
 
+const insertFromDb = {
+  id: 1,
+  name: 'Capa da Invisibilidade',
+};
+
+const insertSuccessful = {
+  status: 'CREATED',
+  data: insertFromDb,
+};
+
 module.exports = {
   allProductsFromDb,
   productId1FromDb,
   productId1FromModel,
   successfulRequest,
   notFoundFulRequest,
+  insertFromDb,
+  insertSuccessful,
 };

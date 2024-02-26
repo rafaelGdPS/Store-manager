@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
 const { productModel } = require('../../../src/models');
-const { productId1FromDb, productId1FromModel } = require('../Mocks/products');
+const { productId1FromDb, productId1FromModel, insertFromDb } = require('../Mocks/products');
 const { productsService } = require('../../../src/services');
 
 describe('testando camada de service', function () {
@@ -19,6 +19,13 @@ describe('testando camada de service', function () {
     
     expect(responseService.status).to.equal('NOT_FOUND');
     expect(responseService.data).to.deep.equal({ message: 'Product not found' });
+  });
+  it('Testar função de cadastro', async function () {
+    sinon.stub(productModel, 'insert').resolves(insertFromDb);
+    const inputData = 'Capa da Invisibilidade';
+    const responseService = await productsService.insertProduct(inputData);
+    expect(responseService.status).to.equal('CREATED');
+    expect(responseService.data).to.deep.equal(insertFromDb);
   });
   afterEach(function () {
     sinon.restore();

@@ -38,6 +38,22 @@ describe('Testando produtos na camada controller', function () {
     expect(res.status).to.have.been.calledWith(404);
     expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
   });
+  // it('Testando a funçao de cadastro', async function () {
+  //   sinon.stub(productsService, 'insertProduct').resolves(insertFromDb);
+    
+  //   const req = {
+  //     body: {
+  //       name: 'Capa da Invisibilidade',
+  //     },
+  //   };
+  //   const res = {
+  //     status: sinon.stub().returnsThis(),
+  //     json: sinon.stub(),
+  //   };
+  //   await productsController.postProduct(req, res);
+  //   expect(res.status).to.have.been.calledWith(201);
+  //   expect(res.json).to.have.been.calledWith(insertFromDb);
+  // });
   
   afterEach(function () {
     sinon.restore();
