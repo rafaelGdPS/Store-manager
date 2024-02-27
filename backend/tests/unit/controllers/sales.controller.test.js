@@ -2,8 +2,9 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const { salesService } = require('../../../src/services');
-const { successfulRequestAllSales, getSalesFromModel, successfulRequestById, getSalesByIdFromModel, notFoundFulRequest } = require('../Mocks/sales');
+const { successfulRequestAllSales, getSalesFromModel, successfulRequestById, getSalesByIdFromModel, notFoundFulRequest, succesfulInsert, insertFromDB } = require('../Mocks/sales');
 const { salesController } = require('../../../src/controllers');
+const validateProductId = require('../../../src/middlewares/validateProductId,');
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -45,6 +46,56 @@ describe('Testando Funções da camada controller na tabela sales', function () 
     await salesController.getSalesById(req, res);
     expect(res.status).to.have.been.calledWith(404);
     expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
+  });
+
+  it('Testando a inserçao de sales', async function () {
+    sinon.stub(salesService, 'salesInsert').resolves(succesfulInsert);
+    const req = {
+      body: [
+        {
+          productId: 1,
+          quantity: 1,
+        },
+        {
+          productId: 2,
+          quantity: 5,
+        },
+      ],
+    };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    const next = sinon.stub();
+
+    await validateProductId(req, res, next);
+    await salesController.postSales(req, res);
+    expect(next).to.have.been.calledWith();
+
+    expect(res.status).to.have.been.calledWith(201);
+    expect(res.json).to.have.been.calledWith(insertFromDB);
+  });
+  it('Testando erro de um item não existir', async function () {
+    const req = {
+      body: [
+        {
+         
+          quantity: 1,
+        },
+        {
+          productId: 2,
+          quantity: 5,
+        },
+      ],
+    };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    const next = sinon.stub();
+    await validateProductId(req, res, next);
+    expect(res.status).to.have.been.calledWith(400);
+    expect(res.json).to.have.been.calledWith({ message: '"productId" is required' });
   });
 
   afterEach(function () {

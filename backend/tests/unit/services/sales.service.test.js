@@ -1,7 +1,7 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
 const { salesModels } = require('../../../src/models');
-const { getSalesFromDb, getSalesFromModel, getSalesByIdFromDb, getSalesByIdFromModel } = require('../Mocks/sales');
+const { getSalesFromDb, getSalesFromModel, getSalesByIdFromDb, getSalesByIdFromModel, insertFromDB } = require('../Mocks/sales');
 const { salesService } = require('../../../src/services');
 
 describe('Testando as Funções da camada service para a tabela sales', function () {
@@ -25,6 +25,22 @@ describe('Testando as Funções da camada service para a tabela sales', function
     const responseService = await salesService.salesById(45);
     expect(responseService.status).to.equal('NOT_FOUND');
     expect(responseService.data).to.deep.equal({ message: 'Sale not found' });
+  });
+  it('Testando validaçoes na inserção', async function () {
+    sinon.stub(salesModels, 'insert').resolves(insertFromDB);
+    const sales = [
+      {
+        productId: 1,
+        quantity: 1,
+      },
+      {
+        productId: 2,
+        quantity: 5,
+      },
+    ];
+    const responseService = await salesService.salesInsert(sales);
+    expect(responseService.status).to.equal('CREATED');
+    expect(responseService.data).to.deep.equal(insertFromDB);
   });
   
   afterEach(function () {

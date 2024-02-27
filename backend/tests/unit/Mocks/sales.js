@@ -83,6 +83,25 @@ const notFoundFulRequest = {
   data: { message: 'Sale not found' },
 };
 
+const insertFromDB = {
+  id: 1,
+  itemsSold: [
+    {
+      productId: 1,
+      quantity: 1,
+    },
+    {
+      productId: 2,
+      quantity: 5,
+    },
+  ],
+};
+
+const succesfulInsert = {
+  status: 'CREATED',
+  data: insertFromDB,
+};
+
 module.exports = {
   getSalesFromDb,
   getSalesFromModel,
@@ -91,4 +110,6 @@ module.exports = {
   successfulRequestAllSales,
   successfulRequestById,
   notFoundFulRequest,
+  insertFromDB,
+  succesfulInsert,
 };

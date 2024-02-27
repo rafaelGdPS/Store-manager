@@ -2,6 +2,8 @@ const express = require('express');
 const { salesController, productsController } = require('./controllers');
 const { postProduct } = require('./controllers/products');
 const validateName = require('./middlewares/validateName');
+const validateProductId = require('./middlewares/validateProductId,');
+const validateQuantity = require('./middlewares/validateQuantity');
 
 const app = express();
 
@@ -18,6 +20,6 @@ app.post('/products', validateName, postProduct);
 
 app.get('/sales', salesController.getSales);
 app.get('/sales/:id', salesController.getSalesById);
-app.post('/sales', salesController.postSales);
+app.post('/sales', validateProductId, validateQuantity, salesController.postSales);
 
 module.exports = app;
