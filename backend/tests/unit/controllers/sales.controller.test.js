@@ -5,6 +5,7 @@ const { salesService } = require('../../../src/services');
 const { successfulRequestAllSales, getSalesFromModel, successfulRequestById, getSalesByIdFromModel, notFoundFulRequest, succesfulInsert, insertFromDB } = require('../Mocks/sales');
 const { salesController } = require('../../../src/controllers');
 const validateProductId = require('../../../src/middlewares/validateProductId,');
+const validateQuantity = require('../../../src/middlewares/validateQuantity');
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -97,7 +98,50 @@ describe('Testando Funções da camada controller na tabela sales', function () 
     expect(res.status).to.have.been.calledWith(400);
     expect(res.json).to.have.been.calledWith({ message: '"productId" is required' });
   });
-
+  it('Testando erro de um quantidade não existir', async function () {
+    const req = {
+      body: [
+        {
+          productId: 3,
+          
+        },
+        {
+          productId: 2,
+          quantity: 5,
+        },
+      ],
+    };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    const next = sinon.stub();
+    await validateQuantity(req, res, next);
+    expect(res.status).to.have.been.calledWith(400);
+    expect(res.json).to.have.been.calledWith({ message: '"quantity" is required' });
+  });
+  it('Testando erro de um quantidade menor igual a 0', async function () {
+    const req = {
+      body: [
+        {
+          productId: 3,
+          quantity: 0,
+        },
+        {
+          productId: 2,
+          quantity: 5,
+        },
+      ],
+    };
+    const res = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+    const next = sinon.stub();
+    await validateQuantity(req, res, next);
+    expect(res.status).to.have.been.calledWith(422);
+    expect(res.json).to.have.been.calledWith({ message: '"quantity" must be greater than or equal to 1' });
+  });
   afterEach(function () {
     sinon.restore();
   });
