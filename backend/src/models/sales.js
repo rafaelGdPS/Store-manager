@@ -26,7 +26,18 @@ const findById = async (id) => {
   return sales;
 };
 
+const insert = async (sales) => {
+  const [{ insertId }] = await connection.execute('INSERT INTO sales(date) VALUES(default)');
+  console.log(insertId);
+  sales.map(async (sale) => {
+    const query = 'INSERT INTO sales_products (product_id, sale_id, quantity) VALUES(?, ?, ?)';
+    await connection.execute(query, [sale.productId, insertId, sale.quantity]);
+  });
+  return { id: insertId, itemsSold: sales };
+};
+
 module.exports = {
   findAll,
   findById,
+  insert,
 };
