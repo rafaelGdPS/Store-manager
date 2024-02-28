@@ -11,7 +11,7 @@ const { expect } = chai;
 chai.use(sinonChai);
 
 describe('Testando Funções da camada controller na tabela sales', function () {
-  it('Testando retorno de todas as sales', async function () {
+  it('Testando retorno de todas as sales get /sales', async function () {
     sinon.stub(salesService, 'allSales').resolves(successfulRequestAllSales);
     const req = {};
     const res = {
