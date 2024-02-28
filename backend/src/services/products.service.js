@@ -1,5 +1,10 @@
 const { productModel } = require('../models');
 
+const requestAllProducts = async () => {
+  const products = await productModel.findAll();
+  return { status: 'SUCCESSFUL', data: products };
+};
+
 const requestProducts = async (id) => {
   const product = await productModel.findById(id);
   if (!product) return { status: 'NOT_FOUND', data: { message: 'Product not found' } };
@@ -21,8 +26,18 @@ const updateProduct = async (id, newProduct) => {
   return { status: 'SUCCESSFUL', data: product };
 };
 
+const deleProduct = async (id) => {
+  const validateProduct = await productModel.findById(id);
+
+  if (!validateProduct) return { status: 'NOT_FOUND', data: { message: 'Product not found' } };
+  await productModel.remove(id);
+  return { status: 'DELETED' };
+};
+
 module.exports = {
+  requestAllProducts,
   requestProducts,
   insertProduct,
   updateProduct,
+  deleProduct,
 };

@@ -4,7 +4,7 @@ const sinonChai = require('sinon-chai');
 const { salesService } = require('../../../src/services');
 const { successfulRequestAllSales, getSalesFromModel, successfulRequestById, getSalesByIdFromModel, notFoundFulRequest, succesfulInsert, insertFromDB } = require('../Mocks/sales');
 const { salesController } = require('../../../src/controllers');
-const validateProductId = require('../../../src/middlewares/validateProductId,');
+const validateProductId = require('../../../src/middlewares/validateProductId');
 const validateQuantity = require('../../../src/middlewares/validateQuantity');
 
 const { expect } = chai;
